@@ -181,7 +181,7 @@ def suggest_tests(module: str) -> dict:
 
 
 # -------------------------------
-# 🧠 PHASE 3: GIT AUTOMATION TOOLS
+# PHASE 3: GIT AUTOMATION TOOLS
 # -------------------------------
 
 
@@ -257,6 +257,80 @@ def git_pull_request(base: str = "main", title: str = "Auto PR", body: str = "Au
         }
     except Exception as e:
         return {"error": str(e)}
+    
+
+# ============================================================
+# Phase 5 –  Extensions
+# ============================================================
+
+@app.tool()
+def spec_based_tester(java_file: str) -> dict:
+    """
+    Generate boundary-value and equivalence-class test suggestions
+    for public numeric methods in a Java source file.
+    """
+    import re, os
+    result = {"file": java_file, "tests": []}
+    if not os.path.isfile(java_file):
+        return {"error": f"File not found: {java_file}"}
+
+    with open(java_file, "r", encoding="utf-8") as f:
+        src = f.read()
+
+    # Very simple parse for 'public <type> <method>(<params>)'
+    matches = re.findall(r"public\s+[\w<>]+\s+(\w+)\s*\(([^)]*)\)", src)
+    for method, params in matches:
+        numeric_params = [p for p in params.split(",") if any(t in p for t in ["int", "double", "float", "long"])]
+        if not numeric_params:
+            continue
+        param_names = [p.split()[-1] for p in numeric_params if p.strip()]
+        template = [f"@Test\nvoid test_{method}_boundaries() {{"]
+
+        for name in param_names:
+            template.append(f"    // Boundary tests for {name}")
+            template.append(f"    new {os.path.basename(java_file).replace('.java','')}().{method}({name}_MIN);")
+            template.append(f"    new {os.path.basename(java_file).replace('.java','')}().{method}({name}_MID);")
+            template.append(f"    new {os.path.basename(java_file).replace('.java','')}().{method}({name}_MAX);")
+
+        template.append("}")
+        result["tests"].append({"method": method, "template": "\n".join(template)})
+    return result
+
+
+@app.tool()
+def code_review_agent(java_dir: str) -> dict:
+    """
+    Perform lightweight static analysis on Java files.
+    Flags long methods, nested loops, and missing documentation.
+    """
+    import os, re
+    issues = []
+    for root, _, files in os.walk(java_dir):
+        for f in files:
+            if f.endswith(".java"):
+                path = os.path.join(root, f)
+                with open(path, "r", encoding="utf-8") as j:
+                    code = j.read()
+
+                # Detect long methods
+                for m in re.finditer(r"(public|private|protected)\s+[\w<>]+\s+\w+\s*\([^)]*\)\s*\{", code):
+                    start = m.end()
+                    end = code.find("}", start)
+                    body = code[start:end]
+                    if body.count("\n") > 30:
+                        issues.append({"file": path, "issue": "Long method (>30 lines)", "snippet": m.group(0)})
+
+                # Missing Javadoc
+                for decl in re.finditer(r"public\s+[\w<>]+\s+\w+\s*\(", code):
+                    before = code[:decl.start()]
+                    if not before.strip().endswith("*/"):
+                        issues.append({"file": path, "issue": "Missing Javadoc", "snippet": decl.group(0)})
+
+                # Nested loops
+                if re.search(r"for\s*\(.*\)\s*{[^}]*for\s*\(", code, re.S):
+                    issues.append({"file": path, "issue": "Nested loop detected"})
+
+    return {"dir": java_dir, "issues": issues}
 
 if __name__ == "__main__":
     import logging

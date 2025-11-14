@@ -5,7 +5,7 @@ import os
 import subprocess
 import json
 
-app = FastMCP(name="calculator")
+app = FastMCP(name="SE333 Test Agent")
 
 @app.tool()
 def add(a: float, b: float) -> float:

@@ -22,7 +22,7 @@ def run_maven_tests():
 
 def parse_coverage():
     if not os.path.exists(REPORT_XML):
-        print("❌ JaCoCo report missing.")
+        print(" JaCoCo report missing.")
         return None
 
     tree = ET.parse(REPORT_XML)
@@ -95,10 +95,10 @@ def improve_tests():
     # Step 2 — parse coverage
     coverage = parse_coverage()
     if not coverage:
-        print("❌ Coverage missing.")
+        print(" Coverage missing.")
         return
 
-    print(f"📊 Current Coverage: {coverage['coverage']}%")
+    print(f" Current Coverage: {coverage['coverage']}%")
 
     # Step 3 — generate suggestions
     suggestions = suggest_tests(JAVA_PROJECT)
@@ -113,7 +113,7 @@ def improve_tests():
     git_commit("Auto-generated improved JUnit tests")
     git_push()
 
-    print("\n🎉 Phase 4 test improvement cycle complete!\n")
+    print("\n Phase 4 test improvement cycle complete!\n")
 
 
 if __name__ == "__main__":

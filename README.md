@@ -6,7 +6,7 @@ Overview:
 
 This project implements an AI-powered intelligent testing agent using the Model Context Protocol (MCP).
 
-    The agent is capable of:
+    Capabilities:
         • Analyzing Java Maven projects
         • Automatically generating & improving JUnit tests
         • Running Maven builds and collecting JaCoCo coverage
@@ -75,9 +75,7 @@ Installation & Environment Setup:
         1. CTRL + SHIFT + P
         2. “Chat: Settings”
         3. Enable Auto-Approve
-        4. Under Auto-Approve Commands, add:
-
-mvn test
+        4. Under Auto-Approve Commands, add: mvn test
 
 
 ⸻⸻⸻
@@ -102,7 +100,7 @@ Follow Instruction Below :
     1. Analyze code.
     2. Generate tests.
     3. Run Maven + JaCoCo.
-    4. Improve tests until coverage increases.
+    4. Improve tests until coverage 100%.
 
 
 ⸻⸻⸻
@@ -111,11 +109,11 @@ MCP Tools – Full API Documentation
 
 Calculator Tools:
 
-    add(a: float, b: float) -> float
+    1. add(a: float, b: float) -> float
 
     Adds two numbers.
 
-sqrt(x: float) -> float:
+    2. sqrt(x: float) -> float:
 
     Computes square root.
 
@@ -123,9 +121,10 @@ sqrt(x: float) -> float:
 
 Core Testing Agent Development (Phase 2)
 
-    run_maven_tests(module: str) -> dict:
+    1. run_maven_tests(module: str) -> dict:
 
-    Runs mvn test inside a module.
+        Runs mvn test inside a module.
+
     Returns:
         • exit code
         • stdout/stderr
@@ -133,19 +132,19 @@ Core Testing Agent Development (Phase 2)
 
 ⸻⸻⸻
 
-    suggest_tests(module: str) -> dict:
+    2. suggest_tests(module: str) -> dict:
 
-    Reads JaCoCo report → extracts uncovered methods → generates test templates.
+        Reads JaCoCo report → extracts uncovered methods → generates test templates.
 
     Returns:
         • list of uncovered methods
         • JUnit test templates
-
+        
 ⸻⸻⸻
 
 Git Automation Tools (Phase 3)
 
-    git_status() -> dict:
+    1. git_status() -> dict:
 
     Returns:
         • modified files
@@ -154,25 +153,25 @@ Git Automation Tools (Phase 3)
 
 ⸻⸻⸻
 
-git_add_all() -> dict:
+    2. git_add_all() -> dict:
 
     Stages all necessary files.
 
 ⸻⸻⸻
 
-git_commit(message: str):
+    3. git_commit(message: str):
 
     Commits staged changes with standardized message.
 
 ⸻⸻⸻
 
-git_push(remote: "origin", branch: "main"):
+    4. git_push(remote: "origin", branch: "main"):
 
     Pushes to remote GitHub repository.
 
 ⸻⸻⸻
 
-git_pull_request(base="main", title, body):
+    5. git_pull_request(base="main", title, body):
 
     Creates simulated PR metadata.
 
@@ -182,7 +181,7 @@ Intelligent Test Iteration (Phase 4)
 
     A custom script:
 
-phase4_agent.py
+        phase4_agent.py
 
     Performs:
         1. mvn test
@@ -194,6 +193,27 @@ phase4_agent.py
         7. Commits improvements to GitHub
 
     Bug fixing is included when tests expose failures.
+
+⸻⸻⸻
+
+To run Phase 4 manually:
+
+    python3 phase4_agent.py
+
+Expected output:
+
+	• coverage %
+	• list of uncovered methods
+	• generated test file paths
+	• confirmation of Git commit/push
+
+Bug Handling
+
+If JaCoCo detects a failing test that exposes a bug:
+
+	• The agent will generate failing tests
+	• You manually fix the bug OR allow the MCP agent to guide you
+	• Commit the fix using git_commit() via MCP or directly in Git
 
 ⸻⸻⸻
 
@@ -219,3 +239,69 @@ Creative Extensions (Phase 5)
         • code smell detection
         • style enforcement
         • basic security scanning
+
+⸻⸻⸻
+
+Coverage Tracking
+
+This project tracks:
+	• total JaCoCo line coverage
+	• coverage improvement between iterations
+	• number of new tests generated
+	• failing → fixed bug counts
+
+All of the above appears in the terminal when running: 
+
+    "python3 phase4_agent.py"
+
+⸻⸻⸻
+
+Troubleshooting & FAQ
+
+1. Maven cannot find POM.xml:
+
+    Run commands from: "cd java_agent"
+
+2. JaCoCo report missing:
+
+    Run: "mvn clean test"
+
+    Ensure: target/site/jacoco/jacoco.xml
+
+3. Generated tests cause compilation errors:
+
+    Delete the generated/folder run : "rm -rf java_agent/src/test/java/generated"
+
+Then re-run:
+
+    Run: "python3 phase4_agent.py"
+
+4. VS Code does not detect MCP server:
+
+    Restart:
+        •	the server (CTRL+C, then python3 server.py)
+        •	VS Code
+    
+5. Git push fails
+
+    Set your origin remote:
+
+        git remote add origin https://github.com
+        git push -u origin main
+
+⸻⸻⸻
+
+Project Structure
+
+SE333-FINAL/
+│
+├── java_agent/                # Maven codebase analyzed
+├── server.py                  # MCP server with all tools
+├── phase4_agent.py            # Intelligent test improver
+├── .github/
+│   └── prompts/
+│       └── tester.prompt.md
+├── demo/                      # 5-min video
+├── report/
+│   └── reflection.pdf         # LaTeX report
+└── README.md

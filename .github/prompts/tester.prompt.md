@@ -1,6 +1,6 @@
 ---
 mode: "agent"
-tools: ["git_status", "git_add_all", "git_commit", "git_push", "suggest_tests"]
+tools: []
 description: "AI agent that iteratively improves test coverage based on JaCoCo results."
 model: "gpt-5-mini"
 ---

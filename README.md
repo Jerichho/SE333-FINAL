@@ -244,7 +244,8 @@ Creative Extensions (Phase 5)
 
 Coverage Tracking
 
-This project tracks:
+This agent tracks:
+
 	• total JaCoCo line coverage
 	• coverage improvement between iterations
 	• number of new tests generated
@@ -279,8 +280,8 @@ Then re-run:
 4. VS Code does not detect MCP server:
 
     Restart:
-        •	the server (CTRL+C, then python3 server.py)
-        •	VS Code
+        • the server (CTRL+C, then python3 server.py)
+        • VS Code
     
 5. Git push fails
 

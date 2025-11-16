@@ -292,17 +292,35 @@ Then re-run:
 
 ⸻⸻⸻
 
-Project Structure
+## Project Structure
 
-SE333-FINAL/
+```
+SE333Finaljguiang/
+├── .git/                      
+├── .idea/                   
+├── .venv/                     # Python virtual environment
+├── .vscode/                   # VS Code MCP server config
+│   ├── mcp.json
+│   └── settings.json
 │
-├── java_agent/                # Maven codebase analyzed
-├── server.py                  # MCP server with all tools
-├── phase4_agent.py            # Intelligent test improver
-├── .github/
-│   └── prompts/
-│       └── tester.prompt.md
-├── demo/                      # 5-min video
+├── java_agent/                # Java Maven project analyzed by the MCP agent
+│   ├── src/
+│   └── target/
+│
+├── server.py                  # Main MCP server with all integrated tools
+├── mcp_test_runner.py         # MCP tools for running Maven & parsing coverage
+├── phase4_agent.py            # Intelligent test-iteration agent (Phase 4)
+│
+├── src/                      
+│
+├── demo/
+│   └── finalpresentation.mov  # Recorded 5-minute demo video
+│
 ├── report/
-│   └── reflection.pdf         # LaTeX report
-└── README.md
+│   └── REFLECTION.pdf         # LaTeX reflection report
+│
+├── README.md                  # Technical documentation
+├── pyproject.toml             # Python project configuration
+├── main.py                    # helper script
+└── defects4j.build.properties # Provided files from assignment
+```

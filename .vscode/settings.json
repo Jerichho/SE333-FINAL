@@ -1,3 +1,10 @@
 {
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "chat.mcp.serverSampling": {
+        "SE333Finaljguiang/.vscode/mcp.json: Test Agent": {
+            "allowedModels": [
+                "copilot/gpt-5-mini"
+            ]
+        }
+    }
 }

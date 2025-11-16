@@ -288,4 +288,4 @@ def code_review_agent(java_dir: str) -> dict:
 
 if __name__ == "__main__":
     print("Starting FastMCP server on http://127.0.0.1:8000 ...")
-    app.run("sse")
+    app.run(transport="sse")
